@@ -16,6 +16,11 @@ class GenresTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('posts_count')
+                    ->counts('posts')
+                    ->label('Posts')
+                    ->sortable()
+                    ->alignCenter(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
