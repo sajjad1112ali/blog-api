@@ -19,7 +19,7 @@ class PostsTable
                 TextColumn::make('title')->searchable()->sortable(),
                 TextColumn::make('slug')->sortable(),
                 TextColumn::make('category.name')->label('Category')->sortable(),
-                TextColumn::make('author.name')->label('Author')->sortable(),
+                TextColumn::make('user.name')->label('Author')->sortable(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->filters([
