@@ -29,7 +29,6 @@ class JsonMiddleware
             $status = $response->status();
             $success = $status >= 200 && $status < 300;
 
-            // Avoid overwriting if already defined
             $original = ['success' => $success, 'status' => $status ] + $original;
 
             $response->setData($original);

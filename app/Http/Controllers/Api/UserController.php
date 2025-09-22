@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
+use App\Http\Resources\UserResource;
 
 
 class UserController extends Controller
@@ -33,6 +34,11 @@ class UserController extends Controller
             'token_type'   => 'Bearer',
             'user'         => $user,
         ]);
+    }
+
+    public function user(Request $request)
+    {
+        return new UserResource($request->user());
     }
 
     public function logout(Request $request)
