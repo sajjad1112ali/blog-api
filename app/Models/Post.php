@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Post extends Model
 {
@@ -21,6 +22,11 @@ class Post extends Model
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'genre_post');
+    }
+
+    public function getPublishedAtFormatedAttribute($value)
+    {
+        return Carbon::parse($value)->format('M d, Y');
     }
 
 }

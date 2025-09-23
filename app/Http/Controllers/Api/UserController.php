@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Services\PostService;
+use App\Http\Resources\PostResource;
 
 
 class UserController extends Controller
 {
+    public function __construct(private PostService $postService) {}
+
     public function login(Request $request)
     {
         $request->validate([
@@ -48,5 +52,11 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Logged out successfully',
         ]);
+    }
+
+    public function myPosts(Request $request)
+    {
+        $posts = $this->postService->myPosts($request);
+        return PostResource::collection($posts);
     }
 }
