@@ -21,12 +21,11 @@ class Post extends Model
 
     public function genres()
     {
-        return $this->belongsToMany(Genre::class, 'genre_post');
+        return $this->belongsToMany(Genre::class, 'genre_post')->withTimestamps();
     }
 
     public function getPublishedAtFormatedAttribute($value)
     {
         return Carbon::parse($value)->format('M d, Y');
     }
-
 }

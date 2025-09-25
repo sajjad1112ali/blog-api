@@ -1,9 +1,14 @@
 <?php
 
+
+use App\Helpers\ResponseHelper;
+use App\Http\Middleware\JsonMiddleware;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\JsonMiddleware;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,30 +23,29 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
-        //     if ($request->is('api/*')) {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => 'Unauthorized',
-        //         ], 401);
-        //     }
-        // });
+        $exceptions->shouldRenderJsonWhen(function (Request $request, Throwable $e) {
+            if ($request->is('api/*')) {
+                return true;
+            }
 
-        // $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {
-        //     if ($request->is('api/*')) {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => 'Resource not found',
-        //         ], 404);
-        //     }
+            return $request->expectsJson();
+        });
+        // $exceptions->render(function (ResourceAccessNotAllowedException | TokenException $e) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'status' => 401,
+        //         'message' => $e->getMessage(),
+        //         'error' => 'Unauthenticated.',
+        //     ], 401);
         // });
-
-        // $exceptions->render(function (Throwable $e, $request) {
-        //     if ($request->is('api/*')) {
-        //         return response()->json([
-        //             'status' => 'error',
-        //             'message' => 'Internal server error',
-        //         ], 500);
-        //     }
-        // });
+        $exceptions->render(function (AuthenticationException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return ResponseHelper::errorResponse('Unauthenticated', 401);
+            }
+        });
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return ResponseHelper::errorResponse('Not Found!', 404);
+            }
+        });
     })->create();
