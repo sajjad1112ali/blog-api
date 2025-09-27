@@ -10,6 +10,7 @@ use Filament\Forms\Components\Hidden;
 
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class PostForm
 {
@@ -47,6 +48,13 @@ class PostForm
                     ->default(Carbon::now()->format('Y-m-d H:i:s')),
                 Hidden::make('user_id')
                     ->default(fn() => auth()->id())
+                    ->required(),
+                SpatieMediaLibraryFileUpload::make('poster')
+                    ->label('Imge')
+                    ->collection('poster')
+                    ->disk('media')
+                    ->image()
+                    ->imageEditor()
                     ->required(),
             ]);
     }

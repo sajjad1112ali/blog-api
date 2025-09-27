@@ -20,7 +20,8 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'content' => $this->content,
             'slug' => $this->slug,
-            'slug' => $this->slug,
+            'image' => $this->getFirstMediaUrl('poster'),          // original
+            'thumbnail'  => $this->getFirstMediaUrl('poster', 'thumb'),  
             'published_at' => $this->published_at_formated,
             'user'     => new UserResource($this->whenLoaded('user')),
             'category' => new CategoryResource($this->whenLoaded('category')),
