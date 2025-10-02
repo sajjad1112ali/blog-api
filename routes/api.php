@@ -13,8 +13,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['json', 'auth:sanctum']], stati
     Route::group(['prefix' => 'posts'], static function () {
         Route::get('/my', [UserController::class, 'myPosts']);
         Route::post('', [PostController::class, 'createPost']);
-        Route::put('{post}', [PostController::class, 'updatePost']);
-        Route::delete('{post}', [PostController::class, 'deletePost']);
+    });
+     Route::group(['prefix' => 'posts/{post}'], static function () {
+        Route::put('', [PostController::class, 'updatePost']);
+        Route::delete('', [PostController::class, 'deletePost']);
+        Route::post('react', [PostController::class, 'react']);
     });
 });
 

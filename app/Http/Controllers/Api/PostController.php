@@ -7,13 +7,15 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Post;
 use App\Services\PostService;
+use App\Services\ReactionService;
 use App\Http\Resources\PostResource;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function __construct(private PostService $postService) {}
+    public function __construct(private PostService $postService, private ReactionService $reactionService) {}
 
     public function index()
     {
@@ -43,5 +45,16 @@ class PostController extends Controller
             'success'  => true,
             'message' => 'Post deleted successfully',
         ];
+    }
+
+    public function react(Request $request, Post $post)
+    {
+        $request->validate([
+            'type' => 'required|string|in:like,dislike,love,haha,wow,sad,angry'
+        ]);
+
+        $reaction = $this->reactionService->toggleReaction($post, $request->type);
+
+        return $reaction;
     }
 }
