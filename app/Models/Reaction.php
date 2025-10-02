@@ -18,19 +18,4 @@ class Reaction extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-     public function reactions()
-    {
-        return $this->hasMany(Reaction::class);
-    }
-
-    public function likes()
-    {
-        return $this->reactions()->where('type', 'like');
-    }
-
-    public function dislikes()
-    {
-        return $this->reactions()->where('type', 'dislike');
-    }
 }

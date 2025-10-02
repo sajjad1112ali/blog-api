@@ -29,6 +29,22 @@ class Post extends Model implements HasMedia
         return $this->belongsToMany(Genre::class, 'genre_post')->withTimestamps();
     }
 
+
+    public function reactions()
+    {
+        return $this->hasMany(Reaction::class);
+    }
+
+    public function likes()
+    {
+        return $this->reactions()->where('type', 'like');
+    }
+
+    public function dislikes()
+    {
+        return $this->reactions()->where('type', 'dislike');
+    }
+
     public function getPublishedAtFormatedAttribute($value)
     {
         return Carbon::parse($value)->format('M d, Y');
@@ -43,10 +59,10 @@ class Post extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-         $this->addMediaConversion('thumb')
-              ->width(368)
-              ->height(232)
-              ->sharpen(10)
-              ->nonQueued();
+        $this->addMediaConversion('thumb')
+            ->width(368)
+            ->height(232)
+            ->sharpen(10)
+            ->nonQueued();
     }
 }

@@ -21,11 +21,21 @@ class PostResource extends JsonResource
             'content' => $this->content,
             'slug' => $this->slug,
             'image' => $this->getFirstMediaUrl('poster'),          // original
-            'thumbnail'  => $this->getFirstMediaUrl('poster', 'thumb'),  
+            'thumbnail'  => $this->getFirstMediaUrl('poster', 'thumb'),
             'published_at' => $this->published_at_formated,
             'user'     => new UserResource($this->whenLoaded('user')),
             'category' => new CategoryResource($this->whenLoaded('category')),
             'genres'   => GenreResource::collection($this->whenLoaded('genres')),
+            'reactions' => [
+                'like'    => $this->likes_count,
+                'dislike' => $this->dislikes_count,
+                'love'    => $this->loves_count,
+                'haha'    => $this->hahas_count,
+                'wow'     => $this->wows_count,
+                'sad'     => $this->sads_count,
+                'angry'   => $this->angrys_count,
+            ],
+            'my_reaction' => $this->whenLoaded('reactions', fn() => $this->reactions->first()?->type),
         ];
     }
 }
