@@ -42,6 +42,12 @@ class PostForm
                     ->required()
                     ->searchable()
                     ->preload(),
+                Select::make('genres')
+                    ->label('Genres')
+                    ->relationship('genres', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
                 TextInput::make('published_at')
                     ->label('Published At')
                     ->disabled()
