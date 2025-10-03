@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostResource extends JsonResource
 {
@@ -20,8 +21,8 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
-            'slug' => $this->slug,
-            'image' => $this->getFirstMediaUrl('poster'),          // original
+            'short_content' => Str::limit($this->content, 200, '...'),
+            'image' => $this->getFirstMediaUrl('poster'),
             'thumbnail'  => $this->getFirstMediaUrl('poster', 'thumb'),
             'published_at' => $this->published_at_formated,
             'user'     => new UserResource($this->whenLoaded('user')),
