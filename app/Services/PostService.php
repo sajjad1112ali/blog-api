@@ -12,18 +12,8 @@ class PostService
     public function getPosts()
     {
         $posts = Post::with(['user', 'category', 'genres'])
-            ->withCount([
-                'reactions as likes_count' => fn($q) => $q->where('type', 'like'),
-                'reactions as dislikes_count' => fn($q) => $q->where('type', 'dislike'),
-                'reactions as loves_count' => fn($q) => $q->where('type', 'love'),
-                'reactions as hahas_count' => fn($q) => $q->where('type', 'haha'),
-                'reactions as wows_count' => fn($q) => $q->where('type', 'wow'),
-                'reactions as sads_count' => fn($q) => $q->where('type', 'sad'),
-                'reactions as angrys_count' => fn($q) => $q->where('type', 'angry'),
-            ])
-            ->when($user = Auth::user(), function ($query) use ($user) {
-                $query->with(['reactions' => fn($q) => $q->where('user_id', $user->id)]);
-            })
+            ->withReactionCounts()
+            ->withMyReaction()
             ->latest()->get();
         return $posts;
     }

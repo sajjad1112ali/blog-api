@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class PostResource extends JsonResource
 {
@@ -35,7 +36,10 @@ class PostResource extends JsonResource
                 'sad'     => $this->sads_count,
                 'angry'   => $this->angrys_count,
             ],
-            'my_reaction' => $this->whenLoaded('reactions', fn() => $this->reactions->first()?->type),
+            'my_reaction' => $this->when(
+                Auth::check(),
+                fn() => $this->reactions->first()?->type
+            ),
         ];
     }
 }
