@@ -14,7 +14,7 @@ class PostService
         $posts = Post::with(['user', 'category', 'genres'])
             ->withReactionCounts()
             ->withMyReaction()
-            ->latest()->get();
+            ->latest()->paginate();
         return $posts;
     }
 
