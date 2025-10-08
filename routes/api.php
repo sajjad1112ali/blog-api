@@ -14,7 +14,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['json', 'auth:sanctum']], stati
         Route::get('/my', [UserController::class, 'myPosts']);
         Route::post('', [PostController::class, 'createPost']);
     });
-     Route::group(['prefix' => 'posts/{post}'], static function () {
+    Route::group(['prefix' => 'posts/{post}'], static function () {
         Route::put('', [PostController::class, 'updatePost']);
         Route::delete('', [PostController::class, 'deletePost']);
         Route::post('react', [PostController::class, 'react']);
@@ -23,5 +23,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['json', 'auth:sanctum']], stati
 
 Route::group(['prefix' => 'v1'], static function () {
     Route::post('/login', [UserController::class, 'login']);
-    Route::get('/posts', [PostController::class, 'index']);
+    Route::group(['prefix' => 'posts'], static function () {
+        Route::get('', [PostController::class, 'index']);
+        Route::get('/{post}', [PostController::class, 'singlePost']);
+    });
 });

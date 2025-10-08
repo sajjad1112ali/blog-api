@@ -23,6 +23,12 @@ class PostController extends Controller
         return PostResource::collection($posts);
     }
 
+    public function singlePost(Post $post)
+    {
+        $postById = $this->postService->singlePost($post);
+        return new PostResource($postById);
+    }
+
     public function createPost(StorePostRequest $request)
     {
         $data = $request->validated();

@@ -18,6 +18,16 @@ class PostService
         return $posts;
     }
 
+    public function singlePost(Post $post)
+    {
+        $post = Post::with(['user', 'category', 'genres'])
+            ->withReactionCounts()
+            ->withMyReaction()
+            ->where('id', $post->id)
+            ->first();
+        return $post;
+    }
+
     public function myPosts(Request $request)
     {
         $posts = $request->user()
