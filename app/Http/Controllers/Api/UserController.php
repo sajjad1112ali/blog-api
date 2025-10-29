@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Http\Resources\UserResource;
 use App\Services\PostService;
 use App\Http\Resources\PostResource;
+use App\Http\Requests\RegisterRequest;
 
 
 class UserController extends Controller
@@ -36,7 +37,23 @@ class UserController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'Bearer',
-            'user'         => $user,
+            'user'         => new UserResource($user),
+        ]);
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $data = $request->validated();
+        $data['password'] = Hash::make($data['password']);
+
+        $user = User::create($data);
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type'   => 'Bearer',
+            'user'         => new UserResource($user),
         ]);
     }
 

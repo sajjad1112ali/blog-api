@@ -23,6 +23,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['json', 'auth:sanctum']], stati
 
 Route::group(['prefix' => 'v1'], static function () {
     Route::post('/login', [UserController::class, 'login']);
+    Route::post('/register', [UserController::class, 'register']);
     Route::group(['prefix' => 'posts'], static function () {
         Route::get('', [PostController::class, 'index']);
         Route::get('/{post}', [PostController::class, 'singlePost']);
